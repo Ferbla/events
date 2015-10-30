@@ -14,6 +14,7 @@ function display_event($results)
   print"<thead> <tr>";
   print"<th>Name</th>";
   print"<th>Date</th>";
+  print "<th></th>";
   print"</tr> </thead>";
 
   while($row = mysqli_fetch_array($results))
@@ -21,7 +22,9 @@ function display_event($results)
     print "<tr>";
     print "<td>" . $row[0] . "</td>";
     print "<td>" . $row[1] . "</td>";
-    /*print "<td>" . $row[2] . "</td>";*/
+    print "<td><button class='btn btn-xs pull-right btn-danger'><span class='glyphicon glyphicon-remove
+    '></span></button><button class='btn btn-xs pull-right'><span class='glyphicon glyphicon-pencil
+'></span></button></td>";
     print "</tr>";
   }
   print"</table>";

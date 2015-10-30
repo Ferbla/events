@@ -38,27 +38,30 @@ $conn = get_connection();
     <div class="main">
 
       <div class="button-right">
-        <button id="add" class="btn">Add Event</button>
+        <button id="add" class="btn"><span class="glyphicon glyphicon-plus"></span></button>
       </div>
 
       <div id="add-event" class="add-event">
         <!-- Container to add new event -->
         <legend>Add Event</legend>
-        <form method="post">
-          <input name="event_name" class="form-item" type="text" placeholder="Event Name">
-          <input name="event_date" class="form-item" type="date">
 
-          <div class="button-right">
-            <br />
-            <button id="add-event" name="add-event" class="btn" type="submit">Submit</button>
-          </div>
-        </form>
+        <div class="row">
+          <form method="post">
+            <div class="col-xs-12">
+              <input name="event_name" class="form-control" type="text" placeholder="Event Name">
+              <br />
+              <input name="event_date" class="form-control" type="date">
+            </div>
+          </form>
+        </div>
+        <br />
+        <button id="add-event" name="add-event" class="btn pull-right" type="submit">Submit</button>
+
       </div>
 
       <div class="display-event">
         <!-- Container to display events -->
-        <hr />
-        <h3>Events</h3>
+        <legend>Events</legend>
         <?php
 
           $result = mysqli_query($conn, "SELECT event.event_name, event.event_date FROM events.event");
