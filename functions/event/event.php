@@ -1,22 +1,21 @@
 <?php
 function add_event($con, $val)
 {
-  /*foreach($options as &$val)
-  {
-    $val = mysqli_real_escape_string($con, $val);
-  }*/
-
   $name = mysqli_real_escape_string($con, $val['name']);
   $date = mysqli_real_escape_string($con, $val['date']);
 
   $query = "INSERT INTO events.event (event.event_name, event.event_date) VALUES ('$name', '$date');";
   mysqli_query($con, $query);
-
 }
 
 function display_event($results)
 {
-  print"<table>";
+  print"<table class='table'>";
+  print"<thead> <tr>";
+  print"<th>Name</th>";
+  print"<th>Date</th>";
+  print"</tr> </thead>";
+
   while($row = mysqli_fetch_array($results))
   {
     print "<tr>";

@@ -14,10 +14,6 @@ body{
   overflow: auto;
 }
 
-.container{
-
-}
-
 .add-event{
   display: none;
   float: left;
@@ -34,7 +30,7 @@ body{
   float: right;
 }
 
-.btn{
+/*.btn{
   display: inline-block;
   padding: 6px 12px;
   text-align: center;
@@ -43,10 +39,14 @@ body{
   border-radius: 3px;
   font-size: 14px;
   font-weight: 400;
-}
+}*/
 
 .form-item{
   width:90%;
   border-radius: 3px;
   padding:10px;
+}
+
+.result-table{
+  border: 1px solid black;
 }
