@@ -1,70 +1,99 @@
 <?php
-include 'functions/db/database.php';
-include 'functions/event/event.php';
+include_once 'inc/head.php';
+include_once 'functions/db/database.php';
+include_once 'functions/event/event.php';
 
 $conn = get_connection();
 
   if(isset($_POST['add-event'])){
-    $test['name'] = $_POST['event_name'];
-    $test['date'] = $_POST['event_date'];
+    $event['name'] = $_POST['event_name'];
+    $event['date'] = $_POST['event_date'];
 
-    add_event($conn, $test);
+    add_event($conn, $event);
+    header('Refresh:0');
+  }
+
+  if(isset($_GET['del'])) {
+    $event_id = html_entity_decode($_GET['del']);
+    $result = delete_event($conn, $event_id);
+
+    unset($_GET['del']);
     header('Location: index.php');
   }
+
+  if(isset($_POST['btn_edit'])){
+    $event_data['event_name'] = $_POST['event_name'];
+    $event_data['event_date'] = $_POST['event_date'];
+    $event_data['event_id'] = $_GET['edit'];
+
+    $result = edit_event($conn, $event_data);
+
+    unset($_GET['edit']);
+    header("Location: index.php");
+  }
+
 ?>
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Events | Landing</title>
-
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <link href="css/style.css" rel="stylesheet">
-  </head>
-  <body>
     <div class="main">
+      <?php
+        if(isset($_GET['edit'])){
+          $event_id = html_entity_decode($_GET['edit']);
+          $event_data = get_event_data($conn, $event_id);
+      ?>
+        <div id="edit-event" class="edit-event">
+          <!-- Container to edit new event -->
+          <legend>Edit Event</legend>
 
-      <div class="button-right">
-        <button id="add" class="btn"><span class="glyphicon glyphicon-plus"></span></button>
-      </div>
+          <div class="row">
+            <form method="post">
+              <div class="col-xs-12">
+                <input name="event_name" class="form-control" type="text" placeholder="Event Name" value="<?php echo $event_data['event_name'] ?>">
+                <br />
+                <input name="event_date" class="form-control" type="date" value="<?php echo $event_data['event_date'] ?>">
 
-      <div id="add-event" class="add-event">
-        <!-- Container to add new event -->
-        <legend>Add Event</legend>
+                <hr />
 
-        <div class="row">
-          <form method="post">
-            <div class="col-xs-12">
-              <input name="event_name" class="form-control" type="text" placeholder="Event Name">
-              <br />
-              <input name="event_date" class="form-control" type="date">
-            </div>
-          </form>
+                <button id="btn_edit" name="btn_edit" class="btn pull-right" type="submit">Edit</button>
+              </div>
+            </form>
+          </div>
+          <br />
         </div>
-        <br />
-        <button id="add-event" name="add-event" class="btn pull-right" type="submit">Submit</button>
+      <?php
+        } else {
+      ?>
+        <div class="button-right">
+          <button id="add" class="btn"><span class="glyphicon glyphicon-plus"></span></button>
+        </div>
 
-      </div>
+        <div id="add-event" class="add-event">
+          <!-- Container to add new event -->
+          <legend>Add Event</legend>
+
+          <div class="row">
+            <form method="post">
+              <div class="col-xs-12">
+                <input name="event_name" class="form-control" type="text" placeholder="Event Name">
+                <br />
+                <input name="event_date" class="form-control" type="date">
+              </div>
+
+              <button id="add-event" name="add-event" class="btn pull-right" type="submit">Submit</button>
+
+            </form>
+          </div>
+          <br />
+
+        </div>
+
+      <?php } ?>
 
       <div class="display-event">
         <!-- Container to display events -->
         <legend>Events</legend>
         <?php
 
-          $result = mysqli_query($conn, "SELECT event.event_name, event.event_date FROM events.event");
+          $result = mysqli_query($conn, "SELECT event.event_id, event.event_name, event.event_date FROM events.event");
           display_event($result);
 
           mysqli_close($conn);
